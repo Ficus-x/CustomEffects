@@ -8,6 +8,10 @@
     {
         public override uint Id { get; set; } = 1;
 
+        public override string Name { get; set; } = "Contusion";
+        
+        public override string Description { get; set; } = string.Empty;
+
         public override Dictionary<EffectType, float> GivenEffects { get; set; } = new Dictionary<EffectType, float>()
         {
             {EffectType.Poisoned, 6f}
@@ -27,7 +31,7 @@
 
         public override void ApplyAfterEffects(Player player)
         {
-            player.ShowHint("You got contusion. ");
+            player.ShowHint("You got contusion.");
         }
     }
 }

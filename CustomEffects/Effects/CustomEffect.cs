@@ -1,6 +1,5 @@
 ﻿namespace CustomEffects.Effects
 {
-    using Exiled.API.Features.DamageHandlers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,9 +15,24 @@
     public abstract class CustomEffect
     {
         /// <summary>
+        /// Gets a list of all registered custom effects.
+        /// </summary>
+        public static HashSet<CustomEffect> Registered { get; } = new HashSet<CustomEffect>();
+
+        /// <summary>
         /// Gets or sets the id of custom effect.
         /// </summary>
         public abstract uint Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of this custom effect.
+        /// </summary>
+        public abstract string Name { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the description of this custom effect.
+        /// </summary>
+        public abstract string Description { get; set; }
         
         /// <summary>
         /// Gets or sets effects to be given to player. Set 0 to make effect endless.
@@ -34,123 +48,116 @@
         /// Gets or sets the chance of activating effects.
         /// </summary>
         public virtual byte Chance { get; set; } = 100;
-        
+
         /// <summary>
         /// Gets or sets the damage types to be need to activate effects.
         /// </summary>
         public virtual List<DamageType> NeededDamageTypes { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the role types to be needed target player to activate effects.
         /// </summary>
         public virtual List<RoleType> NeededTargetRoles { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the role types to be needed target player to activate effects.
         /// </summary>
         public virtual List<RoleType> NeededAttackerRoles { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the team to be needed target player to activate effects.
-        /// </summary>
-        public virtual List<Team> NeededTargetTeams { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the team to be needed target player to activate effects.
-        /// </summary>
-        public virtual List<Team> NeededAttackerTeams { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the side to be needed target player to activate effects.
-        /// </summary>
-        public virtual List<Side> NeededTargetSides { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the side to be needed target player to activate effects.
-        /// </summary>
-        public virtual List<Side> NeededAttackerSides { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the hitBox types to be need to activate effects.
         /// </summary>
         public virtual List<HitboxType> NeededHitBoxTypes { get; set; }
-        
+
         /// <summary>
         /// Gets or sets custom items to stop activating effects.
         /// </summary>
         public virtual List<uint> IgnoredCustomItems { get; set; }
-        
-        /// <summary>
-        /// The method to be called before the player get effects.
-        /// </summary>
-        /// <param name="player">The player to be effected</param>
-        public virtual void ApplyBeforeEffects(Player player) {}
-        
+
         /// <summary>
         /// The method to be called when the player got effects.
         /// </summary>
         /// <param name="player">The player to be effected</param>
-        public virtual void ApplyAfterEffects(Player player) {}
+        public virtual void ApplyAfterEffects(Player player) { }
 
         /// <summary>
-        /// Adds another predictions to make player get custom effect. if returns false the custom effect will not be given
+        /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given
         /// </summary>
-        /// <param name="attacker">Gets the attacker player.</param>
-        /// <param name="target">Gets the target player, who is going to be hurt.</param>
-        /// <param name="handler">Gets the <see cref="T:Exiled.API.Features.DamageHandlers.CustomDamageHandler" /> for the event.</param>
-        /// <param name="amount">Gets the amount of inflicted damage.</param>
-        public virtual bool AddPrediction(Player attacker, Player target, CustomDamageHandler handler, float amount) { return true; }
+        public virtual bool AddPrediction(HurtingEventArgs ev)
+            => true;
 
         public void ProceedDamage(HurtingEventArgs ev)
         {
-            if (Chance == 0 || new Random().Next(0, 100) <= Chance)
-            {
-                if (NeededDamage == 0 || ev.Amount >= NeededDamage)
-                {
-                    if (NeededDamageTypes == null || NeededDamageTypes.Any(damage => damage == ev.Handler.Type))
-                    {
-                        if (NeededHitBoxTypes == null || !ev.Handler.Is(out UniversalDamageHandler hitBox) || NeededHitBoxTypes.Any(hb => hb == hitBox.Hitbox))
-                        {
-                            if (NeededTargetRoles == null || NeededTargetRoles.Any(rt => rt == ev.Target.Role.Type))
-                            {
-                                if (NeededAttackerRoles == null || (ev.Attacker != null && NeededAttackerRoles.Any(rna => rna == ev.Attacker.Role.Type)))
-                                {
-                                    if (!CustomItem.TryGet(ev.Target, out CustomItem item) || IgnoredCustomItems == null || IgnoredCustomItems.Any(ci => ci == item.Id))
-                                    {
-                                        if (NeededAttackerTeams == null || NeededAttackerTeams.Any(at => at == ev.Attacker.Role.Team))
-                                        {
-                                            if (NeededTargetTeams == null || NeededTargetTeams.Any(tt => tt == ev.Target.Role.Team))
-                                            {
-                                                if (NeededAttackerSides == null || NeededAttackerSides.Any(nas => nas == ev.Attacker.Role.Side))
-                                                {
-                                                    if (NeededTargetSides == null || NeededTargetSides.Any(nts => nts == ev.Target.Role.Side))
-                                                    {
-                                                        if (AddPrediction(ev.Attacker, ev.Target, ev.Handler, ev.Amount))
-                                                        {
-                                                            ApplyBeforeEffects(ev.Target);
-                                        
-                                                            foreach (var effect in GivenEffects)
-                                                                ev.Target.EnableEffect(effect.Key, effect.Value);
-                                                            
-                                                            ApplyAfterEffects(ev.Target);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            if (Chance != 0 && new Random().Next(0, 100) > Chance)
+                return;
+            
+            if (NeededDamage != 0 && !(ev.Amount >= NeededDamage))
+                return;
+            
+            if (NeededDamageTypes != null && NeededDamageTypes.All(damage => damage != ev.Handler.Type))
+                return;
+            
+            if (NeededHitBoxTypes != null && ev.Handler.Is(out UniversalDamageHandler hitBox) && NeededHitBoxTypes.All(hb => hb != hitBox.Hitbox))
+                return;
+            
+            if (NeededTargetRoles != null && NeededTargetRoles.All(rt => rt != ev.Target.Role.Type))
+                return;
+            
+            if (NeededAttackerRoles != null && (ev.Attacker == null || NeededAttackerRoles.All(rna => rna != ev.Attacker.Role.Type)))
+                return;
+            
+            if (CustomItem.TryGet(ev.Target, out CustomItem item) && IgnoredCustomItems != null && IgnoredCustomItems.All(ci => ci != item.Id))
+                return;
+            
+            if (!AddPrediction(ev))
+                return;
+            
+            foreach (var effect in GivenEffects)
+                ev.Target.EnableEffect(effect.Key, effect.Value);
+
+            ApplyAfterEffects(ev.Target);
         }
 
-        public void Register()
+        public void SubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting += ProceedDamage;
 
-        public void Unregister()
+        public void UnsubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting -= ProceedDamage;
+
+        internal bool TryRegister()
+        {
+            if (!Plugin.Instance.Config.IsEnabled)
+                return false;
+            
+            if (!Registered.Contains(this))
+            {
+                if (Registered.Any(r => (int) r.Id == (int) Id))
+                {
+                    Log.Warn($"{Name} ({Id}) has tried to register with the same effect ID as another effect. It will not be registered!");
+                    return false;
+                }
+
+                Registered.Add(this);
+                Log.Debug($"Custom effect {Name} ({Id}) has been successfully registered.", Plugin.Instance.Config.IsDebug);
+                
+                SubscribeEvents();
+                
+                return true;
+            }
+            
+            Log.Warn($"Couldn't register {Name} ({Id}) as it already exists.");
+            return false;
+        }
+
+        internal bool TryUnregister()
+        {
+            UnsubscribeEvents();
+            
+            if (CustomEffect.Registered.Remove(this))
+                return true;
+            
+            Log.Warn($"Cannot unregister CustomEffect {Id}, it hasn't been registered yet.");
+            return false;
+        }
     }
 }

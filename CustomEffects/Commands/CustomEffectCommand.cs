@@ -12,21 +12,22 @@
         public override string[] Aliases { get; } = { "ce" };
         public override string Description => "The CustomEffects parent command";
 
+        public CustomEffectCommand() => LoadGeneratedCommands();
+        
         public override void LoadGeneratedCommands()
         {
-            RegisterCommand(new SubCommands.GiveCommand());
-            RegisterCommand(new SubCommands.RemoveCommand());
+            RegisterCommand(new SubCommands.Give());
+            RegisterCommand(new SubCommands.Remove());
+            RegisterCommand(new SubCommands.List());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
-            
-            response = "Please enter a sub command";
+            response = "\nPlease enter a sub command\n\n";
 
             foreach (ICommand command in AllCommands)
             {
-                if (player.CheckPermission($"ce.{command.Command}"))
+                // if (((CommandSender)sender).CheckPermission($"ce.{command.Command}"))
                     response += $"<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>\n\n";
             }
             

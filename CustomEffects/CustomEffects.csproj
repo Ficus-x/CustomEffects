@@ -97,12 +97,14 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Commands\CustomEffectCommand.cs" />
-        <Compile Include="Commands\SubCommands\GiveCommand.cs" />
-        <Compile Include="Commands\SubCommands\RemoveCommand.cs" />
+        <Compile Include="Commands\SubCommands\Give.cs" />
+        <Compile Include="Commands\SubCommands\List.cs" />
+        <Compile Include="Commands\SubCommands\Remove.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Effects.cs" />
         <Compile Include="Effects\ContusionEffect.cs" />
         <Compile Include="Effects\CustomEffect.cs" />
+        <Compile Include="Extensions.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

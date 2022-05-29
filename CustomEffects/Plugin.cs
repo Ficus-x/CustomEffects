@@ -17,8 +17,11 @@
         public override string Prefix => "CustomEffects";
 
         /// <inheritdoc />
-        public override Version RequiredExiledVersion { get; } = new Version(5, 2, 1);
+        public override Version Version { get; } = new Version(1, 0, 0);
 
+        /// <inheritdoc />
+        public override Version RequiredExiledVersion { get; } = new Version(5, 2, 1);
+        
         /// <summary>
         /// Gets the <see cref="Plugin"/> Instance
         /// </summary>
@@ -30,7 +33,7 @@
             
             Config.LoadConfigs();
             
-            Config.EffectsConfigs.ContusionEffect.Register();
+            Config.EffectsConfigs.ContusionEffects.Register();
 
             base.OnEnabled();
         }
@@ -39,7 +42,7 @@
         {
             Instance = null;
             
-            Config.EffectsConfigs.ContusionEffect.Unregister();
+            Config.EffectsConfigs.ContusionEffects.Unregister();
             
             base.OnDisabled();
         }
