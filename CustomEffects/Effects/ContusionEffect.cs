@@ -4,29 +4,30 @@
     using Exiled.API.Enums;
     using Exiled.API.Features;
     
-    public sealed class Acceleration : CustomEffect
+    public sealed class ContusionEffect : CustomEffect
     {
-        public override uint Id { get; set; } = 2;
+        public override uint Id { get; set; } = 1;
 
         public override Dictionary<EffectType, float> GivenEffects { get; set; } = new Dictionary<EffectType, float>()
         {
-            {EffectType.MovementBoost, 5f}
+            {EffectType.Poisoned, 6f}
         };
 
-        public override float NeededDamage { get; set; } = 0;
+        public override byte Chance { get; set; } = 60;
 
         public override List<RoleType> NeededTargetRoles { get; set; } = new List<RoleType>()
         {
-            RoleType.Scp93953, RoleType.Scp93989
+            RoleType.ClassD
         };
 
         public override List<DamageType> NeededDamageTypes { get; set; } = new List<DamageType>()
         {
-            DamageType.Com15, DamageType.Com18, DamageType.Crossvec, DamageType.Firearm,
-            DamageType.Fsp9, DamageType.Logicer, DamageType.Revolver, DamageType.Shotgun, DamageType.E11Sr
+            DamageType.Scp018
         };
 
         public override void ApplyAfterEffects(Player player)
-            => player.ShowHint("Acceleration!");
+        {
+            player.ShowHint("You got contusion. ");
+        }
     }
 }

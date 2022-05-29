@@ -20,7 +20,7 @@
         public override Version RequiredExiledVersion { get; } = new Version(5, 2, 1);
 
         /// <summary>
-        /// Gets the Plugin Instance
+        /// Gets the <see cref="Plugin"/> Instance
         /// </summary>
         public static Plugin Instance { get; private set; }
 
@@ -30,8 +30,7 @@
             
             Config.LoadConfigs();
             
-            Config.EffectsConfigs.Deceleration.Register();
-            Config.EffectsConfigs.Acceleration.Register();
+            Config.EffectsConfigs.ContusionEffect.Register();
 
             base.OnEnabled();
         }
@@ -40,8 +39,7 @@
         {
             Instance = null;
             
-            Config.EffectsConfigs.Deceleration.Unregister();
-            Config.EffectsConfigs.Acceleration.Unregister();
+            Config.EffectsConfigs.ContusionEffect.Unregister();
             
             base.OnDisabled();
         }

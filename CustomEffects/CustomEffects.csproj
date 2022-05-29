@@ -77,6 +77,9 @@
           <HintPath>..\packages\EXILED.5.2.1\lib\net472\Exiled.Updater.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
+        </Reference>
         <Reference Include="NorthwoodLib, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\EXILED.5.2.1\lib\net472\NorthwoodLib.dll</HintPath>
           <Private>True</Private>
@@ -85,17 +88,21 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
         <Reference Include="YamlDotNet, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e">
           <HintPath>$(EXILED)\Plugins\dependencies\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Commands\CustomEffectCommand.cs" />
+        <Compile Include="Commands\SubCommands\GiveCommand.cs" />
+        <Compile Include="Commands\SubCommands\RemoveCommand.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Effects.cs" />
-        <Compile Include="Effects\Acceleration.cs" />
+        <Compile Include="Effects\ContusionEffect.cs" />
         <Compile Include="Effects\CustomEffect.cs" />
-        <Compile Include="Effects\Deceleration.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
