@@ -8,7 +8,7 @@
     public sealed class Plugin : Plugin<Config>
     {
         /// <inheritdoc />
-        public override string Author => "ficus-x";
+        public override string Author => "Ficus-x";
 
         /// <inheritdoc />
         public override string Name => "CustomEffects";

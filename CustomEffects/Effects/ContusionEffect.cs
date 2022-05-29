@@ -29,9 +29,6 @@
             DamageType.Scp018
         };
 
-        public override void ApplyAfterEffects(Player player)
-        {
-            player.ShowHint("You got contusion.");
-        }
+        public override string Hint { get; set; } = "You got contusion.";
     }
 }

@@ -37,9 +37,11 @@
                 return false;
             }
 
-            foreach (var customEffect in CustomEffect.Registered.First(ce => ce.Id == effectId).GivenEffects)
-                effectedPlayer.EnableEffect(customEffect.Key, customEffect.Value);
+            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId)
+                                        ?? throw new NullReferenceException("Custom effect was not found executing give command");
 
+            customEffect.EnableEffects(effectedPlayer);
+            
             response = $"Player {effectedPlayer.Nickname} got this custom effect";
             return true;
         }

@@ -26,11 +26,11 @@
                 return false;
             }
 
-            response = "";
+            response = string.Empty;
             
             foreach (var customEffect in CustomEffect.Registered.OrderBy(e => e.Id))
             {
-                response += $"{customEffect.Name} ({customEffect.Id}) \n";
+                response += $"{customEffect.Name} ({customEffect.Id}) - {customEffect.Description}\n";
             }
 
             return true;

@@ -48,6 +48,16 @@
         /// Gets or sets the chance of activating effects.
         /// </summary>
         public virtual byte Chance { get; set; } = 100;
+        
+        /// <summary>
+        /// Gets or sets the hint to be showed when player gets effects.
+        /// </summary>
+        public virtual string Hint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the duration hint.
+        /// </summary>
+        public virtual float HintDuration { get; set; } = 3f;
 
         /// <summary>
         /// Gets or sets the damage types to be need to activate effects.
@@ -78,12 +88,13 @@
         /// The method to be called when the player got effects.
         /// </summary>
         /// <param name="player">The player to be effected</param>
-        public virtual void ApplyAfterEffects(Player player) { }
+        public virtual void ApplyAfterEffects(Player player)
+            => player.ShowHint(Hint, HintDuration);
 
         /// <summary>
         /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given
         /// </summary>
-        public virtual bool AddPrediction(HurtingEventArgs ev)
+        public virtual bool AddCustomPrediction(HurtingEventArgs ev)
             => true;
 
         public void ProceedDamage(HurtingEventArgs ev)
@@ -109,12 +120,11 @@
             if (CustomItem.TryGet(ev.Target, out CustomItem item) && IgnoredCustomItems != null && IgnoredCustomItems.All(ci => ci != item.Id))
                 return;
             
-            if (!AddPrediction(ev))
+            if (!AddCustomPrediction(ev))
                 return;
             
-            foreach (var effect in GivenEffects)
-                ev.Target.EnableEffect(effect.Key, effect.Value);
-
+            EnableEffects(ev.Target);
+            
             ApplyAfterEffects(ev.Target);
         }
 
@@ -124,6 +134,18 @@
         public void UnsubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting -= ProceedDamage;
 
+        public void EnableEffects(Player player)
+        {
+            foreach (var effect in GivenEffects)
+                player.EnableEffect(effect.Key, effect.Value);
+        }
+
+        public void DisableEffects(Player player)
+        {
+            foreach (var effect in GivenEffects)
+                player.DisableEffect(effect.Key);
+        }
+        
         internal bool TryRegister()
         {
             if (!Plugin.Instance.Config.IsEnabled)
@@ -138,7 +160,7 @@
                 }
 
                 Registered.Add(this);
-                Log.Debug($"Custom effect {Name} ({Id}) has been successfully registered.", Plugin.Instance.Config.IsDebug);
+                Log.Debug($"Custom effect {Name} ({Id}) has been successfully registered.", Plugin.Instance.Config.Debug);
                 
                 SubscribeEvents();
                 

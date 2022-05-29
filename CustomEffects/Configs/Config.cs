@@ -14,7 +14,7 @@
         public bool IsEnabled { get; set; } = true;
         
         [Description("Whether or not debug is enabled")]
-        public bool IsDebug { get; set; } = false;
+        public bool Debug { get; set; } = false;
         
         [Description("The folder path where effect configs will be stored.")]
         public string EffectsFolder { get; set; } = Path.Combine(Paths.Configs, "CustomEffects");

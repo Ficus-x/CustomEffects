@@ -37,8 +37,10 @@
                 return false;
             }
 
-            foreach (var customEffect in CustomEffect.Registered.First(ce => ce.Id == effectId).GivenEffects)
-                effectedPlayer.DisableEffect(customEffect.Key);
+            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId)
+                                        ?? throw new NullReferenceException("Custom effect was not found executing give command");
+
+            customEffect.DisableEffects(effectedPlayer);
 
             response = "This custom effect was removed successfully";
             return true;
