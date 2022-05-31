@@ -133,7 +133,7 @@
                     player.EnableEffect(effect.Key, effect.Value);
             }
             
-            if (Hint != string.Empty)
+            if (!string.IsNullOrEmpty(Hint))
                 player.ShowHint(Hint, HintDuration);
         }
 
