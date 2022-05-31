@@ -37,8 +37,13 @@
                 return false;
             }
 
-            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId)
-                                        ?? throw new NullReferenceException("Custom effect was not found executing give command");
+            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId);
+            
+            if (customEffect == null)
+            {
+                response = "Custom effect was not found.";
+                return false;
+            }
 
             customEffect.EnableEffects(effectedPlayer);
             

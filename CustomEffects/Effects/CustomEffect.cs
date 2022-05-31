@@ -37,7 +37,7 @@
         /// <summary>
         /// Gets or sets effects to be given to player. Set 0 to make effect endless.
         /// </summary>
-        public abstract Dictionary<EffectType, float> GivenEffects { get; set; }
+        public virtual Dictionary<EffectType, float> GivenEffects { get; set; }
 
         /// <summary>
         /// Gets or sets the damage to be needed to activate effects.
@@ -94,7 +94,7 @@
         /// <summary>
         /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given
         /// </summary>
-        public virtual bool AddCustomPrediction(HurtingEventArgs ev)
+        public virtual bool CustomConditions(HurtingEventArgs ev)
             => true;
 
         public void ProceedDamage(HurtingEventArgs ev)
@@ -120,7 +120,7 @@
             if (CustomItem.TryGet(ev.Target, out CustomItem item) && IgnoredCustomItems != null && IgnoredCustomItems.All(ci => ci != item.Id))
                 return;
             
-            if (!AddCustomPrediction(ev))
+            if (!CustomConditions(ev))
                 return;
             
             EnableEffects(ev.Target);
@@ -128,58 +128,62 @@
             ApplyAfterEffects(ev.Target);
         }
 
-        public void SubscribeEvents()
+        public virtual void SubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting += ProceedDamage;
 
-        public void UnsubscribeEvents()
+        public virtual void UnsubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting -= ProceedDamage;
 
-        public void EnableEffects(Player player)
+        public virtual void EnableEffects(Player player)
         {
-            foreach (var effect in GivenEffects)
-                player.EnableEffect(effect.Key, effect.Value);
+            if (GivenEffects != null)
+            {
+                foreach (var effect in GivenEffects)
+                    player.EnableEffect(effect.Key, effect.Value);
+            }
         }
 
-        public void DisableEffects(Player player)
+        public virtual void DisableEffects(Player player)
         {
-            foreach (var effect in GivenEffects)
-                player.DisableEffect(effect.Key);
+            if (GivenEffects != null)
+            {
+                foreach (var effect in GivenEffects)
+                    player.DisableEffect(effect.Key);
+            }
         }
         
-        internal bool TryRegister()
+        internal void TryRegister()
         {
             if (!Plugin.Instance.Config.IsEnabled)
-                return false;
-            
+                return;
+
             if (!Registered.Contains(this))
             {
                 if (Registered.Any(r => (int) r.Id == (int) Id))
                 {
                     Log.Warn($"{Name} ({Id}) has tried to register with the same effect ID as another effect. It will not be registered!");
-                    return false;
+                    return;
                 }
 
                 Registered.Add(this);
                 Log.Debug($"Custom effect {Name} ({Id}) has been successfully registered.", Plugin.Instance.Config.Debug);
                 
                 SubscribeEvents();
-                
-                return true;
+
+                return;
             }
             
             Log.Warn($"Couldn't register {Name} ({Id}) as it already exists.");
-            return false;
         }
 
-        internal bool TryUnregister()
+        internal void TryUnregister()
         {
             UnsubscribeEvents();
             
             if (CustomEffect.Registered.Remove(this))
-                return true;
-            
+                return;
+
             Log.Warn($"Cannot unregister CustomEffect {Id}, it hasn't been registered yet.");
-            return false;
         }
     }
 }
