@@ -30,7 +30,7 @@
             
             foreach (var customEffect in CustomEffect.Registered.OrderBy(e => e.Id))
             {
-                response += $"{customEffect.Name} ({customEffect.Id}) - {customEffect.Description}\n";
+                response += $"{customEffect.Name} ({customEffect.Id})\n";
             }
 
             return true;

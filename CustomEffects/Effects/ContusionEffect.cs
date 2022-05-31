@@ -9,8 +9,6 @@
 
         public override string Name { get; set; } = "Contusion";
         
-        public override string Description { get; set; } = string.Empty;
-
         public override Dictionary<EffectType, float> GivenEffects { get; set; } = new Dictionary<EffectType, float>()
         {
             {EffectType.Poisoned, 6f}

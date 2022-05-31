@@ -30,11 +30,6 @@
         public abstract string Name { get; set; }
         
         /// <summary>
-        /// Gets or sets the description of this custom effect.
-        /// </summary>
-        public abstract string Description { get; set; }
-        
-        /// <summary>
         /// Gets or sets effects to be given to player. Set 0 to make effect endless.
         /// </summary>
         public virtual Dictionary<EffectType, float> GivenEffects { get; set; }
