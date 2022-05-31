@@ -17,11 +17,11 @@
         
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            // if (!((CommandSender)sender).CheckPermission($"ce.{Command}"))
-            // {
-            //     response = $"You do not have permission to execute this command. Permission: ce.{Command}";
-            //     return false;
-            // }
+            if (!sender.CheckPermission($"ce.{Command}"))
+            {
+                response = $"You do not have permission to execute this command. Permission: ce.{Command}";
+                return false;
+            }
             
             if (arguments.Count != 2 || !int.TryParse(arguments.At(0), out int playerId) || !uint.TryParse(arguments.At(1), out uint effectId))
             {
@@ -37,11 +37,15 @@
                 return false;
             }
 
-            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId);
+            CustomEffect customEffect;
             
-            if (customEffect == null)
+            if (CustomEffect.Registered.Any(ce => ce.Id == effectId))
             {
-                response = "Custom effect was not found.";
+                customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId);
+            }
+            else
+            {
+                response = "This custom effect was not found";
                 return false;
             }
 

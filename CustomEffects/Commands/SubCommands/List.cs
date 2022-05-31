@@ -9,16 +9,16 @@
     public sealed class List : ICommand
     {
         public string Command => "list";
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases => new[] { "ls" };
         public string Description => "Gives a list of registered custom effects";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            // if (!((CommandSender) sender).CheckPermission($"ce.{Command}"))
-            // {
-            //     response = $"You do not have permission to execute this command. Permission: ce.{Command}";
-            //     return false;
-            // }
+            if (!sender.CheckPermission($"ce.{Command}"))
+            {
+                response = $"You do not have permission to execute this command. Permission: ce.{Command}";
+                return false;
+            }
 
             if (CustomEffect.Registered.Count == 0)
             {
