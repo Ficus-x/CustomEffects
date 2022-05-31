@@ -85,13 +85,6 @@
         public virtual List<uint> IgnoredCustomItems { get; set; }
 
         /// <summary>
-        /// The method to be called when the player got effects.
-        /// </summary>
-        /// <param name="player">The player to be effected</param>
-        public virtual void ApplyAfterEffects(Player player)
-            => player.ShowHint(Hint, HintDuration);
-
-        /// <summary>
         /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given
         /// </summary>
         public virtual bool CustomConditions(HurtingEventArgs ev)
@@ -124,8 +117,6 @@
                 return;
             
             EnableEffects(ev.Target);
-            
-            ApplyAfterEffects(ev.Target);
         }
 
         public virtual void SubscribeEvents()
