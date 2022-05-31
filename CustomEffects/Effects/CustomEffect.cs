@@ -90,6 +90,9 @@
         public virtual bool CustomConditions(HurtingEventArgs ev)
             => true;
 
+        /// <summary>
+        /// Enables effects if all conditions are true.
+        /// </summary>
         public void ProceedDamage(HurtingEventArgs ev)
         {
             if (Chance != 0 && new Random().Next(0, 100) > Chance)
@@ -119,12 +122,22 @@
             EnableEffects(ev.Target);
         }
 
+        /// <summary>
+        /// Subscribes events.
+        /// </summary>
         public virtual void SubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting += ProceedDamage;
 
+        /// <summary>
+        /// Unsubscribes events.
+        /// </summary>
         public virtual void UnsubscribeEvents()
             => Exiled.Events.Handlers.Player.Hurting -= ProceedDamage;
 
+        /// <summary>
+        /// Enables custom effects to the player.
+        /// </summary>
+        /// <param name="player"></param>
         public virtual void EnableEffects(Player player)
         {
             if (GivenEffects != null)
@@ -137,6 +150,10 @@
                 player.ShowHint(Hint, HintDuration);
         }
 
+        /// <summary>
+        /// Disables custom effects from the player.
+        /// </summary>
+        /// <param name="player">The player to be disabled custom effects</param>
         public virtual void DisableEffects(Player player)
         {
             if (GivenEffects != null)
@@ -146,6 +163,9 @@
             }
         }
         
+        /// <summary>
+        /// Tries to register custom effects.
+        /// </summary>
         internal void TryRegister()
         {
             if (!Plugin.Instance.Config.IsEnabled)
@@ -170,6 +190,9 @@
             Log.Warn($"Couldn't register {Name} ({Id}) as it already exists.");
         }
 
+        /// <summary>
+        /// Tries to unregister custom effects.
+        /// </summary>
         internal void TryUnregister()
         {
             UnsubscribeEvents();
