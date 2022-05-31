@@ -2,8 +2,7 @@
 {
     using System.Collections.Generic;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
-    
+
     public sealed class ContusionEffect : CustomEffect
     {
         public override uint Id { get; set; } = 1;

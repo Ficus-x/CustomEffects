@@ -1,6 +1,4 @@
-﻿using Exiled.API.Features;
-
-namespace CustomEffects
+﻿namespace CustomEffects
 {
     using System;
     using System.Collections.Generic;
