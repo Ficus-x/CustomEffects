@@ -37,15 +37,11 @@
                 return false;
             }
 
-            CustomEffect customEffect;
+            CustomEffect customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId);
             
-            if (CustomEffect.Registered.Any(ce => ce.Id == effectId))
+            if (customEffect == null)
             {
-                customEffect = CustomEffect.Registered.FirstOrDefault(ce => ce.Id == effectId);
-            }
-            else
-            {
-                response = "This custom effect was not found";
+                response = "Custom effect was not found.";
                 return false;
             }
 
