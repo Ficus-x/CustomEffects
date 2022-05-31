@@ -132,6 +132,9 @@
                 foreach (var effect in GivenEffects)
                     player.EnableEffect(effect.Key, effect.Value);
             }
+            
+            if (Hint != string.Empty)
+                player.ShowHint(Hint, HintDuration);
         }
 
         public virtual void DisableEffects(Player player)
