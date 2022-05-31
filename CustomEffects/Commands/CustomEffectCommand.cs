@@ -27,7 +27,7 @@
 
             foreach (ICommand command in AllCommands)
             {
-                // if (((CommandSender)sender).CheckPermission($"ce.{command.Command}"))
+                if (sender.CheckPermission($"ce.{command.Command}"))
                     response += $"<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>\n\n";
             }
             
