@@ -33,7 +33,7 @@
 
             if (effectedPlayer == null)
             {
-                response = "Player was not found";
+                response = "Player was not found.";
                 return false;
             }
 
@@ -47,7 +47,7 @@
 
             customEffect.DisableEffects(effectedPlayer);
 
-            response = "This custom effect was removed successfully";
+            response = "This custom effect was removed successfully.";
             return true;
         }
     }

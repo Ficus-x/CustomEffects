@@ -33,7 +33,7 @@
 
             if (effectedPlayer == null)
             {
-                response = "Player was not found";
+                response = "Player was not found.";
                 return false;
             }
 
@@ -47,7 +47,7 @@
 
             customEffect.EnableEffects(effectedPlayer);
             
-            response = $"Player {effectedPlayer.Nickname} got this custom effect";
+            response = $"Player {effectedPlayer.Nickname} got this custom effect.";
             return true;
         }
     }

@@ -1,6 +1,5 @@
 ﻿namespace CustomEffects.Commands
 {
-    using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using System;
     using CommandSystem;

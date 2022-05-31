@@ -85,7 +85,7 @@
         public virtual List<uint> IgnoredCustomItems { get; set; }
 
         /// <summary>
-        /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given
+        /// Adds custom prediction to make player get custom effect. if returns false, the custom effect will not be given.
         /// </summary>
         public virtual bool CustomConditions(HurtingEventArgs ev)
             => true;

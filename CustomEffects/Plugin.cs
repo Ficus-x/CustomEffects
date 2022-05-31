@@ -27,6 +27,7 @@
         /// </summary>
         public static Plugin Instance { get; private set; }
 
+        /// <inheritdoc />
         public override void OnEnabled()
         {
             Instance = this;
@@ -38,6 +39,7 @@
             base.OnEnabled();
         }
 
+        /// <inheritdoc />
         public override void OnDisabled()
         {
             Instance = null;
