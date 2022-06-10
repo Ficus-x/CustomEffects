@@ -10,7 +10,7 @@
     public sealed class Give : ICommand
     {
         public string Command => "give";
-        public string[] Aliases => new[]{ "gv" };
+        public string[] Aliases { get; } = { "gv" };
         public string Description => "Gives a custom effect to a player";
 
         public const string Usage = "Usage: ce give (player ID) (CustomEffect ID)";

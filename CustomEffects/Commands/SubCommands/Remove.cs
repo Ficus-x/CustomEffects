@@ -10,7 +10,7 @@
     public sealed class Remove : ICommand
     {
         public string Command => "remove";
-        public string[] Aliases => new[]{ "rm" };
+        public string[] Aliases { get; } = { "rm" };
         public string Description => "Removes a custom effect from a player";
 
         public const string Usage = "Usage: ce remove (Player ID) (Custom effect ID)";

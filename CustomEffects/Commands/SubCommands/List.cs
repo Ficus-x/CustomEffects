@@ -9,7 +9,7 @@
     public sealed class List : ICommand
     {
         public string Command => "list";
-        public string[] Aliases => new[] { "ls" };
+        public string[] Aliases { get; } = { "ls" };
         public string Description => "Gives a list of registered custom effects";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
