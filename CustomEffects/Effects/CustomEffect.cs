@@ -1,4 +1,4 @@
-﻿namespace CustomEffects.Effects
+namespace CustomEffects.Effects
 {
     using System;
     using System.Collections.Generic;
@@ -197,5 +197,11 @@
 
             Log.Warn($"Cannot unregister CustomEffect {Id}, it hasn't been registered yet.");
         }
+
+        /// <summary>
+        /// Returns the Custom Effect in a human readable format.
+        /// </summary>
+        /// <returns>A string containing Effect-related data.</returns>
+        public override string ToString() => $"Id - {Id}, Name - {Name}, NeededDamage - {NeededDamage}, Chance - {Chance}";
     }
 }
